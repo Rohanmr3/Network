@@ -36,7 +36,7 @@ def get_ip_from_hostname(hostname):
         ip_address = socket.gethostbyname(hostname)
         return ip_address
     except socket.gaierror:
-        print("Error: Invalid hostname.")
+        print("Error: Invalid hostname/IP address.")
         sys.exit(1)
 
 def scan_tcp(target, ports, verbose):
@@ -79,7 +79,7 @@ def scan_tcp_port(target, port):
         elif scapy_socket.getlayer(scapy.TCP).flags == 0x04:  # RST
             return "closed", "TCP RST response"
         else:
-            return "filtered", "Unknown response"
+            return "filtered", "No response received (even after retransmissions)"
     elif scapy_socket and scapy_socket.haslayer(scapy.ICMP):
         icmp_error = scapy_socket.getlayer(scapy.ICMP)
         if icmp_error.type == 3 and icmp_error.code in [1, 2, 3, 9, 10, 13]:
